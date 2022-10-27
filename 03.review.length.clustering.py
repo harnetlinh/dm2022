@@ -1,3 +1,4 @@
+from ast import While
 import json
 import numpy as np
 
@@ -10,6 +11,7 @@ class Cluster:
     def __repr__(self):
         return str(self.cluster)
 
+    # get distance between two clusters TODO: check if this is correct
     def getClusterDistance(self, cluster, dist = 0):
         cluster1 = self.cluster
         cluster2 = cluster.cluster
@@ -18,9 +20,13 @@ class Cluster:
             for j in cluster2:
                 
                 if i != j:
-                    _dist = abs(i - j)
-                    if _dist < dist:
-                        dist = _dist
+                    
+                    if type(i) != int or type(j) != int:
+                        _dist = i.getClusterDistance(j, dist)
+                    else:
+                        _dist = abs(i - j)
+                        if _dist < dist:
+                            dist = _dist
 
         return dist
 
@@ -46,10 +52,10 @@ texts = [d['text'] for d in data]
 
 # Extract the length of the text
 for text in texts:
-
     maxtrix_text_length.append(Cluster(len(text)))
 
-# Convert the list to numpy array
-maxtrix_text_length = np.array(maxtrix_text_length)
+# create clusters step by step TODO: I have not done this yet
+while True:
+
 
 print(maxtrix_text_length)

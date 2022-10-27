@@ -1,6 +1,30 @@
 import json
 import numpy as np
 
+
+class Cluster:
+    def __init__(self, cluster):
+        self.cluster = []
+        self.cluster.append(cluster)
+
+    def __repr__(self):
+        return str(self.cluster)
+
+    def getClusterDistance(self, cluster, dist = 0):
+        cluster1 = self.cluster
+        cluster2 = cluster.cluster
+        _dist = 0
+        for i in cluster1:
+            for j in cluster2:
+                
+                if i != j:
+                    _dist = abs(i - j)
+                    if _dist < dist:
+                        dist = _dist
+
+        return dist
+
+
 # open the file
 review_file = open("../data_test/yelp_academic_dataset_review.json")
 
@@ -10,27 +34,22 @@ count = 0
 # Load the data
 with review_file as f:
     for line in f:
-        count = count + 1
-        if count == 1000:
+        if count == 5:
             break
         data.append(json.loads(line))
+        count = count + 1
 
 maxtrix_text_length = []
 
 # Extract the text from the data
 texts = [d['text'] for d in data]
 
-#calculate the distance between the text length
-for i in range(len(texts)):
-    for j in range(len(texts)):
-        if i != j:
-            maxtrix_text_length.append(abs(len(texts[i]) - len(texts[j])))
+# Extract the length of the text
+for text in texts:
 
-#find the max and min distance
+    maxtrix_text_length.append(Cluster(len(text)))
+
+# Convert the list to numpy array
 maxtrix_text_length = np.array(maxtrix_text_length)
-min_distance = np.min(maxtrix_text_length)
-max_distance = np.max(maxtrix_text_length)
-print("min distance: ", min_distance)
-print("max distance: ", max_distance)
 
-
+print(maxtrix_text_length)
